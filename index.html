@@ -1,79 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-PT">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parabéns, Mãe! 🎂</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-
-  <!-- Confetti canvas (shown after opening) -->
-  <canvas id="confetti-canvas"></canvas>
-
-  <main class="scene">
-
-    <!-- ── STEP 1: Envelope ── -->
-    <div class="envelope-wrapper" id="envelope-wrapper">
-      <p class="hint">Clica no envelope para abrir a tua surpresa 🎁</p>
-
-      <div class="envelope" id="envelope">
-        <!-- Back of envelope (behind letter) -->
-        <div class="envelope__back"></div>
-
-        <!-- Letter (slides up when opened) -->
-        <div class="letter" id="letter">
-          <div class="letter__inner">
-            <p class="letter__salutation">Querida Mãe,</p>
-            <p class="letter__body">
-              Hoje é um dia muito especial —<br />
-              o teu dia! ✨<br /><br />
-              Estas palavras são pequenas de mais<br />
-              para dizer o quanto te amo,<br />
-              mas são escritas com o coração cheio. 💛<br /><br />
-              Que este ano te traga muita saúde,<br />
-              alegria e todos os abraços que mereces.
-            </p>
-            <p class="letter__signature">Com todo o amor,<br /><em>o teu filho/a</em> 🌸</p>
-          </div>
-        </div>
-
-        <!-- Envelope flap (top triangle) -->
-        <div class="envelope__flap" id="flap"></div>
-
-        <!-- Front left & right triangles for colour -->
-        <div class="envelope__front-left"></div>
-        <div class="envelope__front-right"></div>
-
-        <!-- Bottom pocket -->
-        <div class="envelope__pocket"></div>
-
-        <!-- Wax seal -->
-        <div class="envelope__seal" id="seal">❤️</div>
-      </div>
-    </div>
-
-    <!-- ── STEP 2: Full message card (shown after letter opens) ── -->
-    <div class="card-wrapper hidden" id="card-wrapper">
-      <div class="card">
-        <div class="card__ribbon"></div>
-        <p class="card__emoji">🎂</p>
-        <h1 class="card__title">Parabéns, Mãe!</h1>
-        <p class="card__message">
-          Obrigado/a por tudo o que és e tudo o que fazes.<br />
-          És a melhor mãe do mundo — não há dúvida nenhuma! 💛
-        </p>
-        <button class="card__btn" id="restart-btn" aria-label="Recomeçar">
-          ↩ Recomeçar
-        </button>
-      </div>
-    </div>
-
-  </main>
-
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/oferta-surpresa/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parabéns, Mãe! 🎂</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="/oferta-surpresa/assets/index-CabWN6Ke.js"></script>
+    <link rel="stylesheet" crossorigin href="/oferta-surpresa/assets/index-C3iMBbq4.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
