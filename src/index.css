@@ -1,0 +1,29 @@
+:root {
+  --cream:  #fdf6ec;
+  --gold:   #d4a843;
+  --rose:   #c0575a;
+  --blush:  #f5c6cb;
+  --deep:   #7b2d37;
+  --text:   #3d2b1f;
+}
+
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  font-family: 'Lato', sans-serif;
+  overflow: hidden;
+}
+
+body {
+  background: linear-gradient(135deg, #fceabb 0%, #f8b4b8 60%, #e8c8f0 100%);
+  background-size: 400% 400%;
+  animation: gradShift 14s ease infinite;
+}
+
+@keyframes gradShift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}

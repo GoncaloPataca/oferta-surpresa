@@ -1,35 +1,73 @@
-# Oferta Surpresa 🎁
+# React + TypeScript + Vite
 
-Um envelope digital para oferecer como prendinha de aniversário.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Como funciona
+Currently, two official plugins are available:
 
-Abre `index.html` no browser, clica no envelope e vê a mensagem de aniversário aparecer com confetis! 🎉
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Estrutura
+## React Compiler
 
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-oferta-surpresa/
-├── index.html          # Página principal
-├── styles.css          # Estilos e animações
-├── script.js           # Lógica (abertura do envelope + confetis)
-└── .github/
-    └── workflows/
-        └── deploy.yml  # Deploy automático para GitHub Pages
+
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-## Personalizar
-
-Edita as mensagens directamente em `index.html`:
-
-- **`.letter__body`** — o texto dentro da carta
-- **`.card__title`** e **`.card__message`** — o cartão final que aparece depois de abrir o envelope
-- **`.letter__signature`** — a assinatura
-
-## Deploy no GitHub Pages
-
-1. Cria um repositório no GitHub e faz push deste código para o branch `main`.
-2. Vai a **Settings → Pages** no teu repositório.
-3. Em **Source**, selecciona **GitHub Actions**.
-4. Na próxima vez que fizeres push para `main`, o workflow faz o deploy automaticamente.
-5. O site fica disponível em `https://<o-teu-usuario>.github.io/<nome-do-repositorio>/`.
