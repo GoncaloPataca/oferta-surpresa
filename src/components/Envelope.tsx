@@ -103,7 +103,6 @@ export function Envelope({ isOpen, onOpen }: EnvelopeProps) {
           width: W,
           height: H,
           cursor: isOpen ? 'default' : 'pointer',
-          perspective: 900,
           filter: 'drop-shadow(0 18px 40px rgba(0,0,0,0.25))',
         }}
       >
@@ -263,127 +262,89 @@ export function Envelope({ isOpen, onOpen }: EnvelopeProps) {
         </motion.div>
 
         {/* ════════════════════════════════════════════
-            LAYER 4 – lid INNER face
-            Revealed when the lid flips back.
-            Same triangle shape as outer lid but inner colour.
-            Rendered slightly BEHIND the outer lid (same
-            transformOrigin, so they flip together).
-        ════════════════════════════════════════════ */}
-        <motion.div
-          initial={false}
-          animate={isOpen ? { rotateX: -180 } : { rotateX: 0 }}
-          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1], delay: isOpen ? 0.05 : 0 }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 4,
-            transformOrigin: 'top center',
-            transformStyle: 'preserve-3d',
-            pointerEvents: 'none',
-          }}
-        >
-          {/* Back-face (inner lid colour) */}
-          <svg
-            width={W} height={H}
-            viewBox={`0 0 ${W} ${H}`}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backfaceVisibility: 'hidden',
-              transform: 'rotateX(180deg)',
-            }}
-          >
-            <polygon
-              points={`0,0 ${W / 2},${H * 0.54} ${W},0`}
-              fill={C.lidInner}
-            />
-            <line
-              x1="0" y1="0" x2={W / 2} y2={H * 0.54}
-              stroke={C.fold} strokeWidth="0.7" opacity="0.4"
-            />
-            <line
-              x1={W} y1="0" x2={W / 2} y2={H * 0.54}
-              stroke={C.fold} strokeWidth="0.7" opacity="0.4"
-            />
-          </svg>
-        </motion.div>
+            LAYERS 4-5 – lid (single face, clean fold)
 
-        {/* ════════════════════════════════════════════
-            LAYER 5 – lid OUTER face (the flap)
-            This is what flips open. Rendered as a div
-            with perspective so it rotates around its
-            top edge revealing the inner face above.
+            Key rules that prevent the "flying away" bug:
+            • perspective MUST live on the DIRECT parent of
+              the rotating element – not a distant ancestor.
+            • perspectiveOrigin '50% 0%' puts the vanishing
+              point exactly on the hinge (top-center edge).
+            • transformOrigin '50% 0%' on the motion.div
+              makes it pivot around that same hinge.
+            • backfaceVisibility hidden on the SVG makes the
+              flap fade naturally as it swings past -90° –
+              no inner face or preserve-3d magic needed.
         ════════════════════════════════════════════ */}
-        <motion.div
-          initial={false}
-          animate={isOpen ? { rotateX: -180 } : { rotateX: 0 }}
-          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1], delay: isOpen ? 0.05 : 0 }}
+        <div
           style={{
             position: 'absolute',
             inset: 0,
             zIndex: 5,
-            transformOrigin: 'top center',
-            transformStyle: 'preserve-3d',
+            /* ↓ perspective on the DIRECT parent – this is the fix */
+            perspective: '550px',
+            perspectiveOrigin: '50% 0%',
             pointerEvents: 'none',
+            overflow: 'visible',
           }}
         >
-          {/* Front face of lid */}
-          <svg
-            width={W} height={H}
-            viewBox={`0 0 ${W} ${H}`}
+          <motion.div
+            initial={false}
+            animate={isOpen ? { rotateX: -180 } : { rotateX: 0 }}
+            transition={{ duration: 0.6, ease: [0.42, 0, 0.18, 1], delay: isOpen ? 0.08 : 0 }}
             style={{
               position: 'absolute',
               inset: 0,
-              backfaceVisibility: 'hidden',
+              transformOrigin: '50% 0%',   // pivot == hinge
             }}
           >
-            <defs>
-              <linearGradient id="lidGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stopColor="#EF9D5A" />
-                <stop offset="100%" stopColor={C.lid} />
-              </linearGradient>
-              {/* scalloped / lace edge along the bottom of the flap */}
-              <clipPath id="flapClip">
-                <polygon points={`0,0 ${W / 2},${H * 0.56} ${W},0`} />
-              </clipPath>
-            </defs>
-            {/* Main flap shape */}
-            <polygon
-              points={`0,0 ${W / 2},${H * 0.56} ${W},0`}
-              fill="url(#lidGrad)"
-            />
-            {/* Subtle inner shadow at the fold */}
-            <polygon
-              points={`0,0 ${W / 2},${H * 0.56} ${W},0`}
-              fill="none"
-              stroke={C.fold}
-              strokeWidth="1.2"
-              opacity="0.3"
-            />
-            {/* Decorative scallop row near the flap edge */}
-            {Array.from({ length: 11 }, (_, k) => {
-              const t  = (k + 0.5) / 11;
-              const cx = t * W;
-              const cy = t < 0.5
-                ? (t / 0.5) * (H * 0.56)
-                : ((1 - t) / 0.5) * (H * 0.56);
-              return (
-                <circle
-                  key={k}
-                  cx={cx}
-                  cy={cy - 7}
-                  r="4.5"
-                  fill={C.bottom}
-                  opacity="0.55"
-                />
-              );
-            })}
-            {/* Tiny flower motif in center of flap */}
-            <text x={W / 2} y={H * 0.22} textAnchor="middle" fontSize="26" opacity="0.22">
-              🌸
-            </text>
-          </svg>
-        </motion.div>
+            <svg
+              width={W} height={H}
+              viewBox={`0 0 ${W} ${H}`}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+              }}
+            >
+              <defs>
+                <linearGradient id="lidGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%"   stopColor="#EF9D5A" />
+                  <stop offset="100%" stopColor={C.lid} />
+                </linearGradient>
+              </defs>
+
+              {/* Main flap shape */}
+              <polygon
+                points={`0,0 ${W / 2},${H * 0.56} ${W},0`}
+                fill="url(#lidGrad)"
+              />
+              {/* Edge crease */}
+              <polygon
+                points={`0,0 ${W / 2},${H * 0.56} ${W},0`}
+                fill="none"
+                stroke={C.fold}
+                strokeWidth="1.2"
+                opacity="0.3"
+              />
+              {/* Scallop dots along flap edge */}
+              {Array.from({ length: 11 }, (_, k) => {
+                const t  = (k + 0.5) / 11;
+                const cx = t * W;
+                const cy = t < 0.5
+                  ? (t / 0.5) * (H * 0.56)
+                  : ((1 - t) / 0.5) * (H * 0.56);
+                return (
+                  <circle key={k} cx={cx} cy={cy - 7} r="4.5" fill={C.bottom} opacity="0.55" />
+                );
+              })}
+              {/* Flower motif in centre of flap */}
+              <text x={W / 2} y={H * 0.22} textAnchor="middle" fontSize="26" opacity="0.22">
+                🌸
+              </text>
+            </svg>
+          </motion.div>
+        </div>
 
         {/* ════════════════════════════════════════════
             LAYER 6 – wax seal
